@@ -1,13 +1,12 @@
-import os
 import cv2
 import numpy as np
 from keras.models import model_from_json
 from keras.preprocessing import image
 
 # load model
-model = model_from_json(open("fer.json", "r").read())
+model = model_from_json(open("model1.json", "r").read())
 # load weights
-model.load_weights('fer.h5')
+model.load_weights('weights1.h5')
 
 face_haar_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
@@ -37,15 +36,13 @@ while True:
         emotions = ('angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral')
         predicted_emotion = emotions[max_index]
 
-        cv2.putText(test_img, predicted_emotion, (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
+        cv2.putText(test_img, predicted_emotion, (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 2)
 
     resized_img = cv2.resize(test_img, (1000, 700))
     cv2.imshow('Facial emotion analysis ', resized_img)
 
-    if cv2.waitKey(10) == ord('q'):  # wait until 'q' key is pressed
+    if cv2.waitKey(10) & 0xFF == ord('q'):
         break
 
 cap.release()
-k = cv2.waitKey(0)
-if k == 27:
-    cv2.destroyAllWindows()
+cv2.destroyAllWindows()
